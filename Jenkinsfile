@@ -1,19 +1,18 @@
 pipeline {
-    agent any
-    
+    agent {
+        docker {
+            image 'node:18-alpine'
+            label 'linux docker java21'
+            reuseNode true
+        }
+    }
+
     environment {
         FILE_NAME = 'container'
     }
 
     stages {
         stage('Build') {
-            agent {
-                docker {
-                    image 'node:18-alpine'
-                    label 'linux docker java21'
-                    reuseNode true
-                }
-            }
             steps {
                 sh '''
                     ls -lha

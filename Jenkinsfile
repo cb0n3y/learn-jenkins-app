@@ -37,11 +37,6 @@ pipeline {
                         echo "[i] File not found"
                     }
                 }
-                sh '''
-                    if (fileExists("$BUILD_FOLDER/index.html")) {
-                    
-                    }
-                '''
             }
         }
     }

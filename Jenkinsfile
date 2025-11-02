@@ -32,10 +32,10 @@ pipeline {
                 echo "[+] Testing ..."
                 script {
                     if (fileExists("$BUILD_FOLDER/index.html")) {
-                        echo "[+] File found"
+                        echo "[+] Build artifact found: $BUILD_FOLDER/index.html"
                     } else {
-                        echo "[i] File not found"
-                    }
+                        // error() is a Jenkins pipeline step - it throws an exception and marks the stage (and pipeline) as FAILED.
+                        error("[!] Build artifact not found at $BUILD_FOLDER/index.html — failing pipeline.")
                 }
             }
         }

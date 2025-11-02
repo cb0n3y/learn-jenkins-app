@@ -10,6 +10,7 @@ pipeline {
     environment {
         FILE_NAME = 'container'
         NPM_CONFIG_CACHE = "${WORKSPACE}/.npm" 
+        BUILD_FOLDER = "${WORKSPACE}/build"
     }
 
     stages {
@@ -22,6 +23,24 @@ pipeline {
                     npm ci
                     npm run build
                     ls -lha
+                '''
+            }
+        }
+
+        stage('Test') {
+            steps {
+                echo "[+] Testing ..."
+                script {
+                    if (fileExists("$BUILD_FOLDER/index.html")) {
+                        echo "[+] File found"
+                    } else {
+                        echo "[i] File not found"
+                    }
+                }
+                sh '''
+                    if (fileExists("$BUILD_FOLDER/index.html")) {
+                    
+                    }
                 '''
             }
         }

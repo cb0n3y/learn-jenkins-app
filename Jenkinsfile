@@ -36,6 +36,7 @@ pipeline {
                     } else {
                         // error() is a Jenkins pipeline step - it throws an exception and marks the stage (and pipeline) as FAILED.
                         error("[!] Build artifact not found at $BUILD_FOLDER/index.html — failing pipeline.")
+                    }
                 }
             }
         }

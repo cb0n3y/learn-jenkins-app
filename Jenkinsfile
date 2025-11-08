@@ -31,6 +31,7 @@ pipeline {
             agent {
                 docker {
                     image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                    label 'linux docker java21'
                     reuseNode true
                 }
             }

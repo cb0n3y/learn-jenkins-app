@@ -1,5 +1,6 @@
 pipeline {
-
+    agen none
+    
     environment {
         FILE_NAME = 'container'
         NPM_CONFIG_CACHE = "${WORKSPACE}/.npm" 

@@ -41,6 +41,7 @@ pipeline {
                 echo "E2E"
                 sh '''
                     npm install serve
+                    export PATH=$PATH:./node_modules/.bin
                     serve -s build
                     npx playwright test
                 '''

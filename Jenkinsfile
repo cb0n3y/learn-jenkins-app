@@ -40,7 +40,7 @@ pipeline {
             steps {
                 echo "E2E"
                 sh '''
-                    npm install erve
+                    npm install serve
                     serve -s build
                     npx playwright test
                 '''

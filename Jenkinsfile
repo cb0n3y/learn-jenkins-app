@@ -27,6 +27,23 @@ pipeline {
             }
         }
 
+        stage('E2E') {
+            agent {
+                docker {
+                    image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                    reuseNode true
+                }
+            }
+            steps {
+                echo "E2E"
+                sh '''
+                    npm install -g serve
+                    serve -s build
+                    npx playwright test
+                '''
+            }
+        }
+
         stage('Test') {
             steps {
                 echo "[+] Test stage"

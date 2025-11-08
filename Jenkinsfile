@@ -29,7 +29,7 @@ pipeline {
 
         stage('Test') {
             steps {
-                echo "[+] Testing ..."
+                echo "[+] Test stage"
                 script {
                     if (fileExists("$BUILD_FOLDER/index.html")) {
                         echo "[+] Build artifact found: $BUILD_FOLDER/index.html"
@@ -41,6 +41,12 @@ pipeline {
                     sh 'npm test'
                 }
             }
+        }
+    }
+
+    post {
+        always {
+            junit 'test-results/junit.xml'
         }
     }
 }

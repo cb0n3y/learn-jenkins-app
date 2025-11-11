@@ -79,7 +79,7 @@ pipeline {
 
     post {
         always {
-            node {
+            node('linux docker java21') {
                 junit 'test-results/junit.xml'
             }
         }

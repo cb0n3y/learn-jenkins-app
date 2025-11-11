@@ -24,9 +24,9 @@ pipeline {
                     npm --version
                     npm ci
                     # Install required package
-                    npm install react-scripts@5.0.1
-                    # Fix security issue before building
-                    npm audit fix --force
+                    npm install react-scripts@5.0.1 --save
+                    # Verify react-scripts is installed
+                    npx react-scripts --version
                     npm run build
                     ls -lha
                 '''

@@ -53,6 +53,14 @@ pipeline {
         }
 
         stage('Test') {
+            agent {
+                docker {
+                    image 'mcr.microsoft.com/playwright:v1.56.1-jammy'
+                    label 'linux docker java21'
+                    reuseNode true
+                }
+            }
+
             steps {
                 echo "[+] Test stage"
                 script {
@@ -71,7 +79,9 @@ pipeline {
 
     post {
         always {
-            junit 'test-results/junit.xml'
+            node {
+                junit 'test-results/junit.xml'
+            }
         }
     }
 }

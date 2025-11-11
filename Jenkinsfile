@@ -23,6 +23,8 @@ pipeline {
                     node --version
                     npm --version
                     npm ci
+                    # Fix security issue before building
+                    npm audit fix --force
                     npm run build
                     ls -lha
                 '''

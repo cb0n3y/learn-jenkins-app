@@ -67,7 +67,7 @@ pipeline {
                 echo "[+] Running unit tests..."
                 unstash 'react-build'
                 sh '''
-                    if [ ! -f "$BUILD_FOLDER/index.html" ]; then
+                    if [ ! -f "build/index.html" ]; then
                         echo "[!] Build artifact not found — failing."
                         exit 1
                     fi

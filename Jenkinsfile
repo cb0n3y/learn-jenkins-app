@@ -30,6 +30,7 @@ pipeline {
                     npm run build
                     ls -lha
                 '''
+                stash includes: 'build/**', name: 'react-build'
             }
         }
 
@@ -42,11 +43,12 @@ pipeline {
                 }
             }
             steps {
-                echo "E2E"
+                unstash 'react-build'
+                echo "Starting E2E tests..."
                 sh '''
                     npm install serve
                     export PATH=$PATH:./node_modules/.bin
-                    serve -s build &
+                    serve -s build -l 3000 &
                     npx playwright test
                 '''
             }
@@ -55,24 +57,37 @@ pipeline {
         stage('Test') {
             agent {
                 docker {
-                    image 'mcr.microsoft.com/playwright:v1.56.1-jammy'
+                    image 'node:18-alpine'
                     label 'linux docker java21'
                     reuseNode true
                 }
             }
 
             steps {
-                echo "[+] Test stage"
+                echo "[+] Running unit tests..."
+                unstash 'react-build'
+                sh '''
+                    if [ ! -f "$BUILD_FOLDER/index.html" ]; then
+                        echo "[!] Build artifact not found — failing."
+                        exit 1
+                    fi
+                    npm test
+                '''
+                /*
                 script {
+                    
                     if (fileExists("$BUILD_FOLDER/index.html")) {
                         echo "[+] Build artifact found: $BUILD_FOLDER/index.html"
                     } else {
                         // error() is a Jenkins pipeline step - it throws an exception and marks the stage (and pipeline) as FAILED.
                         error("[!] Build artifact not found at $BUILD_FOLDER/index.html — failing pipeline.")
                     }
+                    
+                    
 
                     sh 'npm test'
                 }
+                */
             }
         }
     }
@@ -81,6 +96,7 @@ pipeline {
         always {
             node('linux docker java21') {
                 junit 'test-results/junit.xml'
+                cleanWs()
             }
         }
     }

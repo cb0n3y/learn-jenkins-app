@@ -49,7 +49,7 @@ pipeline {
                     npm install serve
                     export PATH=$PATH:./node_modules/.bin
                     serve -s build -l 3000 &
-                    npx playwright test
+                    npx playwright test --report=html
                 '''
             }
         }

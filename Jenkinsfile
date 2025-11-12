@@ -8,7 +8,6 @@ pipeline {
     }
 
     stages {
-        /*
         stage('Build') {
             agent {
                 docker {
@@ -34,7 +33,7 @@ pipeline {
                 stash includes: 'build/**', name: 'react-build'
             }
         }
-        */
+
         stage('Run test') {
             parallel {
                 stage('E2E') {

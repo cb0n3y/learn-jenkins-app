@@ -1,5 +1,5 @@
 pipeline {
-    agent none
+    agent any
 
     environment {
         FILE_NAME = 'container'
@@ -9,6 +9,7 @@ pipeline {
 
     stages {
         stage('Build') {
+            /*
             agent {
                 docker {
                     image 'node:18-alpine'
@@ -16,6 +17,7 @@ pipeline {
                     reuseNode true
                 }
             }
+            */
 
             steps {
                 sh '''
@@ -37,6 +39,7 @@ pipeline {
         stage('Run test') {
             parallel {
                 stage('E2E') {
+                    /*
                     agent {
                         docker {
                             image 'mcr.microsoft.com/playwright:v1.56.1-jammy'
@@ -44,6 +47,7 @@ pipeline {
                             reuseNode true
                         }
                     }
+                    */
 
                     steps {
                         unstash 'react-build'
@@ -58,6 +62,7 @@ pipeline {
                 }
 
                 stage('Test') {
+                    /*
                     agent {
                         docker {
                             image 'node:18-alpine'
@@ -65,6 +70,7 @@ pipeline {
                             reuseNode true
                         }
                     }
+                    */
 
                     steps {
                         echo "[+] Running unit tests..."

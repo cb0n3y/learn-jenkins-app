@@ -79,19 +79,23 @@ pipeline {
 
     post {
         always {
-            junit 'test-results/junit.xml'
-            publishHTML([
-                allowMissing: false,
-                alwaysLinkToLastBuild: false,
-                icon: '',
-                keepAll: false,
-                reportDir: 'playwright-report',
-                reportFiles: 'index.html',
-                reportName: 'Playwright HTML Report',
-                reportTitles: '',
-                useWrapperFileDirectly: true
-            ])
-            cleanWs()
+            node('linux docker java21') {
+                ws("${env.WORKSPACE}") {
+                    junit 'test-results/junit.xml'
+                    publishHTML([
+                        allowMissing: false,
+                        alwaysLinkToLastBuild: false,
+                        icon: '',
+                        keepAll: false,
+                        reportDir: 'playwright-report',
+                        reportFiles: 'index.html',
+                        reportName: 'Playwright HTML Report',
+                        reportTitles: '',
+                        useWrapperFileDirectly: true
+                    ])
+                cleanWs()
+                }
+            }
         }
     }
 }

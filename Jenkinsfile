@@ -8,6 +8,7 @@ pipeline {
     }
 
     stages {
+        /*
         stage('Build') {
             agent {
                 docker {
@@ -33,7 +34,55 @@ pipeline {
                 stash includes: 'build/**', name: 'react-build'
             }
         }
+        */
+        stage('Run test') {
+            parallel {
+                stage('Test') {
+                    agent {
+                        docker {
+                            image 'node:18-alpine'
+                            label 'linux docker java21'
+                            reuseNode true
+                        }
+                    }
 
+                    steps {
+                        echo "[+] Running unit tests..."
+                        unstash 'react-build'
+                        sh '''
+                            if [ ! -f "build/index.html" ]; then
+                                echo "[!] Build artifact not found — failing."
+                                exit 1
+                            fi
+                            npm test
+                        '''
+                    }
+                }
+
+                stage('E2E') {
+                    agent {
+                        docker {
+                            image 'mcr.microsoft.com/playwright:v1.56.1-jammy'
+                            label 'linux docker java21'
+                            reuseNode true
+                        }
+                    }
+
+                    steps {
+                        unstash 'react-build'
+                        echo "Starting E2E tests..."
+                        sh '''
+                            npm install serve
+                            export PATH=$PATH:./node_modules/.bin
+                            serve -s build -l 3000 &
+                            npx playwright test --reporter=html
+                        '''
+                    }
+                }
+                
+            }
+        }
+        /*
         stage('E2E') {
             agent {
                 docker {
@@ -75,6 +124,7 @@ pipeline {
                 '''
             }
         }
+        */
     }
 
     post {

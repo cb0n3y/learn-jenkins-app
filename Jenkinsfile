@@ -85,10 +85,8 @@ pipeline {
     post {
         always {
             node('linux docker java21') {
-                ws("${env.WORKSPACE}") {
-                    junit 'test-results/junit.xml'
+                junit 'test-results/junit.xml'
                 cleanWs()
-                }
             }
         }
     }
